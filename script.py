@@ -10,29 +10,42 @@ import re
 # --- CONFIGURAÇÃO ---
 ESPECIALIDADE = "psiquiatra"
 CONVENIO = "unimed"
-CIDADE = "" # Se quiser cidade, coloque ex: "sao-paulo"
-META = 50 
+CIDADE = "" 
+META = 5 
 # --------------------
-
-# Lógica de montagem de URL corrigida
-cidade_parte = f"/{CIDADE}" if CIDADE else ""
-url = f"https://www.doctoralia.com.br/{ESPECIALIDADE}{cidade_parte}/{CONVENIO}".replace("//", "/")
 
 chrome_options = Options()
 chrome_options.add_argument("--headless")
 chrome_options.add_argument("--no-sandbox")
 chrome_options.add_argument("--disable-dev-shm-usage")
-chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36")
+# ESTA LINHA É CRUCIAL: Engana o site fingindo ser um Windows real
+chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
+chrome_options.add_experimental_option('useAutomationExtension', False)
 
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 
+# Comando para esconder que é um robô (evita detecção básica)
+driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
+  "source": "Object.defineProperty(navigator, 'webdriver', {get: () => undefined})"
+})
+
 def coletar():
-    url = f"https://www.doctoralia.com.br/{ESPECIALIDADE}/{CONVENIO}"
-    print(f"Acessando: {url}")
-    driver.get(url)
-    time.sleep(10)
+    cidade_parte = f"/{CIDADE}" if CIDADE else ""
+    url = f"https://www.doctoralia.com.br/{ESPECIALIDADE}{cidade_parte}/{CONVENIO}".replace("//", "/")
     
-    # Fecha banner de cookies se aparecer
+    print(f"Tentando acessar: {url}")
+    driver.get(url)
+    
+    # Espera muito mais tempo (o site carrega verificações de bot no início)
+    time.sleep(15) 
+    
+    # Tira um "print" imaginário da página para o log (ajuda a diagnosticar)
+    print("Título da página atual:", driver.title)
+    
+    if "Verificação" in driver.title or "Just a moment" in driver.title:
+        print("BLOQUEADO: O site pediu verificação de robô (Captcha).")
+        return []
     try:
         btn_cookie = driver.find_element(By.ID, "onetrust-accept-btn-handler")
         btn_cookie.click()
