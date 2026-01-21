@@ -1,23 +1,31 @@
 name: Executar Scraper Diário
+
 on:
-  workflow_dispatch: # Permite que você aperte um botão para rodar
+  workflow_dispatch: # Botão manual
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Baixar código
-        uses: actions/checkout@v2
+      - name: Baixar código do repositório
+        uses: actions/checkout@v3
+
       - name: Instalar Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: '3.9'
+
       - name: Instalar Bibliotecas
-        run: pip install -r requirements.txt
+        run: |
+          pip install selenium webdriver-manager pandas
+
       - name: Rodar o Scraper
         run: python script.py
-      - name: Salvar Resultado
-        uses: actions/upload-artifact@v4
-        with:
-          name: lista-medicos
-          path: resultado_doctoralia.csv
+
+      - name: Salvar o arquivo no Repositório (Commit e Push)
+        run: |
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "actions@github.com"
+          git add resultado_doctoralia.csv
+          git commit -m "Planilha atualizada em: $(date +'%d/%m/%Y %H:%M')" || echo "Sem alterações para salvar"
+          git push
