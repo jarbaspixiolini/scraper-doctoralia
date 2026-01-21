@@ -10,8 +10,13 @@ import re
 # --- CONFIGURAÇÃO ---
 ESPECIALIDADE = "psiquiatra"
 CONVENIO = "unimed"
-META = 15 
+CIDADE = "" # Se quiser cidade, coloque ex: "sao-paulo"
+META = 50 
 # --------------------
+
+# Lógica de montagem de URL corrigida
+cidade_parte = f"/{CIDADE}" if CIDADE else ""
+url = f"https://www.doctoralia.com.br/{ESPECIALIDADE}{cidade_parte}/{CONVENIO}".replace("//", "/")
 
 chrome_options = Options()
 chrome_options.add_argument("--headless")
