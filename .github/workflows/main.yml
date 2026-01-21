@@ -1,0 +1,23 @@
+name: Executar Scraper Diário
+on:
+  workflow_dispatch: # Permite que você aperte um botão para rodar
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v2
+      - name: Instalar Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+      - name: Instalar Bibliotecas
+        run: pip install -r requirements.txt
+      - name: Rodar o Scraper
+        run: python script.py
+      - name: Salvar Resultado
+        uses: actions/upload-artifact@v4
+        with:
+          name: lista-medicos
+          path: resultado_doctoralia.csv
