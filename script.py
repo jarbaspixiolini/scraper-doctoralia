@@ -36,25 +36,89 @@ def coletar():
     
     print(f"Tentando acessar: {url}")
     driver.get(url)
-    
-    # Espera muito mais tempo (o site carrega verificações de bot no início)
-    time.sleep(15) 
-    
-    # Tira um "print" imaginário da página para o log (ajuda a diagnosticar)
-    print("Título da página atual:", driver.title)
-    
-    if "Verificação" in driver.title or "Just a moment" in driver.title:
-        print("BLOQUEADO: O site pediu verificação de robô (Captcha).")
-        return []
-    try:
-        btn_cookie = driver.find_element(By.ID, "onetrust-accept-btn-handler")
-        btn_cookie.click()
-        print("Cookies aceitos.")
-    except:
-        pass
+    time.sleep(10) 
     
     resultados = []
     links_processados = set()
+
+    # Tentativa de encontrar os links dos médicos de várias formas
+    # 1. Busca por um atributo comum no código da Doctoralia
+    elementos = driver.find_elements(By.CSS_SELECTOR, "a[data-test-id='doctor-name']")
+    
+    # 2. Se não achou, tenta por links que contenham '/medico/' no endereço
+    if not elementos:
+        elementos = driver.find_elements(By.XPATH, "//a[contains(@href, '/medico/')]")
+        
+    # 3. Se ainda não achou, tenta pelos títulos H3
+    if not elementos:
+        elementos = driver.find_elements(By.CSS_SELECTOR, "h3 a")
+
+    print(f"Total de elementos encontrados na página: {len(elementos)}")
+
+    links_na_pagina = []
+    for el in elementos:
+        href = el.get_attribute("href")
+        # Garante que o link é de um médico e não de um anúncio ou artigo
+        if href and "/medico/" in href and href not in links_processados:
+            # Evita links de 'opiniões' ou 'agendamento'
+            if not any(x in href for x in ["#opinions", "/check-specialty"]):
+                links_na_pagina.append(href)
+                links_processados.add(href)
+
+    links_na_pagina = list(dict.fromkeys(links_na_pagina)) # Remove duplicatas
+    print(f"Links de perfis identificados: {len(links_na_pagina)}")
+
+    if not links_na_pagina:
+        print("Ainda não encontrei links. O site pode estar usando uma estrutura nova.")
+        return []
+
+    # Segue a coleta nos perfis...
+    for link in links_na_pagina[:META]:
+        print(f"Entrando no perfil: {link}")
+        driver.get(link)
+        time.sleep(5)
+        
+        try:
+            nome = driver.find_element(By.TAG_NAME, "h1").text
+            corpo = driver.find_element(By.TAG_NAME, "body").text
+            
+            # CRM e RQE
+            crm = re.search(r"CRM\s*[:\-\s]*(\d+)", corpo)
+            rqe = re.search(r"RQE\s*[:\-\s]*(\d+)", corpo)
+            
+            # Endereço
+            try:
+                endereco = driver.find_element(By.CLASS_NAME, "location-address").text
+            except:
+                endereco = "Endereço não visível"
+
+            # Telefone
+            tel = "Não revelado"
+            try:
+                # Tenta clicar no botão de revelar telefone
+                btn = driver.find_element(By.CSS_SELECTOR, "[data-test-id='show-phone-button'], .btn-phone")
+                driver.execute_script("arguments[0].scrollIntoView();", btn)
+                time.sleep(1)
+                driver.execute_script("arguments[0].click();", btn)
+                time.sleep(3)
+                tel_element = driver.find_element(By.CSS_SELECTOR, ".phone-number, [data-test-id='phone-number']")
+                tel = tel_element.text
+            except:
+                pass
+
+            resultados.append({
+                "Nome": nome.strip(),
+                "CRM": crm.group(1) if crm else "N/A",
+                "RQE": rqe.group(1) if rqe else "N/A",
+                "Plano": CONVENIO.upper(),
+                "Telefone": tel.strip(),
+                "Endereço": endereco.replace("\n", " ").strip()
+            })
+            print(f"Coletado com sucesso: {nome}")
+        except Exception as e:
+            print(f"Erro ao ler perfil: {e}")
+            
+    return resultados
 
     while len(resultados) < META:
         # Pega links específicos de perfis de médicos
