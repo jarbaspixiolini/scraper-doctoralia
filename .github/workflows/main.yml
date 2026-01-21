@@ -22,10 +22,15 @@ jobs:
       - name: Rodar o Scraper
         run: python script.py
 
-      - name: Salvar o arquivo no Repositório (Commit e Push)
+- name: Salvar o arquivo no Repositório (Commit e Push)
         run: |
           git config --global user.name "GitHub Actions Bot"
           git config --global user.email "actions@github.com"
-          git add resultado_doctoralia.csv
-          git commit -m "Planilha atualizada em: $(date +'%d/%m/%Y %H:%M')" || echo "Sem alterações para salvar"
-          git push
+          if [ -f resultado_doctoralia.csv ]; then
+            git add resultado_doctoralia.csv
+            git commit -m "Planilha atualizada em: $(date +'%d/%m/%Y %H:%M')"
+            git push
+          else
+            echo "O arquivo resultado_doctoralia.csv não foi gerado. O scraper pode ter sido bloqueado ou não encontrou resultados."
+            exit 1
+          fi
