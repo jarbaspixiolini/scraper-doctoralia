@@ -63,17 +63,34 @@ def coletar():
                     endereco = driver.find_element(By.CLASS_NAME, "location-address").text
                 except: endereco = "Não encontrado"
 
-                # TELEFONE (Baseado na sua 2ª e 3ª imagem)
+                # TELEFONE (Ajustado para esperar a janela flutuante abrir)
                 tel = "Não revelado"
                 try:
-                    # Busca o link que contém o texto que você mostrou
+                    # 1. Tenta clicar no link que você mostrou na imagem
                     btn = driver.find_element(By.PARTIAL_LINK_TEXT, "Mostrar número de telefone")
+                    driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", btn)
+                    time.sleep(1)
                     driver.execute_script("arguments[0].click();", btn)
-                    time.sleep(3)
-                    # O número aparece em um <b> como na sua 3ª imagem
-                    tel_elemento = driver.find_element(By.CSS_SELECTOR, "div.modal-content b, .phone-number")
-                    tel = tel_elemento.text
-                except: pass
+                    
+                    # 2. ESPERA a janelinha (modal) aparecer
+                    time.sleep(4) 
+                    
+                    # 3. Tenta capturar o número de 3 formas diferentes dentro da janela
+                    try:
+                        # Forma 1: Pelo negrito <b> que você mostrou na 3ª imagem
+                        tel_elemento = driver.find_element(By.CSS_SELECTOR, "div.modal-content b")
+                        tel = tel_elemento.text
+                    except:
+                        try:
+                            # Forma 2: Pelo link de telefone (tel:)
+                            tel_elemento = driver.find_element(By.CSS_SELECTOR, "a[href^='tel:']")
+                            tel = tel_elemento.text
+                        except:
+                            # Forma 3: Pela classe genérica de número
+                            tel_elemento = driver.find_element(By.CLASS_NAME, "phone-number")
+                            tel = tel_elemento.text
+                except:
+                    pass
 
                 resultados.append({
                     "Nome": nome,
