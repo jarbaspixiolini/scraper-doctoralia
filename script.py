@@ -10,50 +10,64 @@ import re
 # --- CONFIGURAÇÃO ---
 ESPECIALIDADE = "psiquiatra"
 CONVENIO = "unimed"
-META = 50 
+META = 15 
 # --------------------
 
 chrome_options = Options()
 chrome_options.add_argument("--headless")
 chrome_options.add_argument("--no-sandbox")
+chrome_options.add_argument("--disable-dev-shm-usage")
 chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36")
 
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 
 def coletar():
     url = f"https://www.doctoralia.com.br/{ESPECIALIDADE}/{CONVENIO}"
+    print(f"Acessando: {url}")
     driver.get(url)
-    time.sleep(5)
+    time.sleep(6)
+    
+    # Fecha banner de cookies se aparecer
+    try:
+        btn_cookie = driver.find_element(By.ID, "onetrust-accept-btn-handler")
+        btn_cookie.click()
+        print("Cookies aceitos.")
+    except:
+        pass
     
     resultados = []
     links_processados = set()
 
     while len(resultados) < META:
-        # Encontra todos os links que levam para perfis de médicos
-        todos_links = driver.find_elements(By.TAG_NAME, "a")
-        links_medicos = []
+        # Pega links específicos de perfis de médicos
+        links_na_pagina = []
+        elementos_a = driver.find_elements(By.CSS_SELECTOR, "a[data-test-id='doctor-name'], a[href*='/medico/']")
         
-        for l in todos_links:
-            href = l.get_attribute("href")
+        for el in elementos_a:
+            href = el.get_attribute("href")
             if href and "/medico/" in href and href not in links_processados:
-                links_medicos.append(href)
+                links_na_pagina.append(href)
                 links_processados.add(href)
+        
+        # Remove duplicados mantendo a ordem
+        links_na_pagina = list(dict.fromkeys(links_na_pagina))
 
-        if not links_medicos:
-            print("Não encontrei novos links na página.")
+        if not links_na_pagina:
+            print("Nenhum link novo encontrado. Encerrando.")
             break
 
-        for link in links_medicos:
+        for link in links_na_pagina:
             if len(resultados) >= META: break
             
+            print(f"Processando: {link}")
             driver.get(link)
-            time.sleep(4)
+            time.sleep(5)
             
             try:
                 corpo = driver.find_element(By.TAG_NAME, "body").text
                 nome = driver.find_element(By.TAG_NAME, "h1").text
                 
-                # Busca CRM e RQE com filtros de texto
+                # Busca CRM e RQE
                 crm = re.search(r"CRM\s*[:\-\s]*(\d+)", corpo)
                 rqe = re.search(r"RQE\s*[:\-\s]*(\d+)", corpo)
                 
@@ -66,40 +80,54 @@ def coletar():
                 # Telefone
                 tel = "Não revelado"
                 try:
+                    # Rola até o botão para ele ficar visível
                     btn = driver.find_element(By.CSS_SELECTOR, "[data-test-id='show-phone-button']")
+                    driver.execute_script("arguments[0].scrollIntoView();", btn)
+                    time.sleep(1)
                     driver.execute_script("arguments[0].click();", btn)
-                    time.sleep(2)
-                    tel = driver.find_element(By.CSS_SELECTOR, ".phone-number, [data-test-id='phone-number']").text
-                except: pass
+                    time.sleep(3)
+                    tel_element = driver.find_element(By.CSS_SELECTOR, ".phone-number, [data-test-id='phone-number'], a[href^='tel:']")
+                    tel = tel_element.text
+                except: 
+                    pass
 
                 resultados.append({
-                    "Nome": nome,
+                    "Nome": nome.strip(),
                     "CRM": crm.group(1) if crm else "N/A",
                     "RQE": rqe.group(1) if rqe else "N/A",
                     "Plano": CONVENIO.upper(),
-                    "Telefone": tel,
-                    "Endereço": endereco.replace("\n", " ")
+                    "Telefone": tel.strip(),
+                    "Endereço": endereco.replace("\n", " ").strip()
                 })
-                print(f"Coletado: {nome}")
-            except:
+                print(f"Sucesso: {nome}")
+            except Exception as e:
+                print(f"Erro no perfil: {e}")
                 continue
             
-            driver.back()
-            time.sleep(2)
+            # Volta para a listagem
+            driver.get(url)
+            time.sleep(4)
 
-        # Tenta próxima página
+        # Paginação
         try:
             btn_next = driver.find_element(By.CSS_SELECTOR, "[data-test-id='pagination-next']")
             driver.execute_script("arguments[0].click();", btn_next)
-            time.sleep(5)
+            url = driver.current_url # Atualiza a URL base para a próxima página
+            time.sleep(6)
         except:
+            print("Fim das páginas.")
             break
 
     return resultados
 
-dados = coletar()
-if dados:
-    df = pd.DataFrame(dados)
-    df.to_csv("resultado_doctoralia.csv", index=False, encoding='utf-8-sig')
-    print("Arquivo gerado com sucesso!")
-driver.quit()
+# Execução
+try:
+    dados = coletar()
+    if dados:
+        df = pd.DataFrame(dados)
+        df.to_csv("resultado_doctoralia.csv", index=False, encoding='utf-8-sig')
+        print(f"Processo finalizado com {len(dados)} contatos!")
+    else:
+        print("O script rodou mas não encontrou dados. Verifique os seletores.")
+finally:
+    driver.quit()
