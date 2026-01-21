@@ -5,6 +5,8 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 import re
 
 # --- CONFIGURAÇÃO ---
@@ -19,23 +21,22 @@ chrome_options.add_argument("--no-sandbox")
 chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
 
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
+wait = WebDriverWait(driver, 10)
 
 def coletar():
-    url = f"https://www.doctoralia.com.br/{ESPECIALIDADE}/{CONVENIO}"
-    driver.get(url)
+    url_base = f"https://www.doctoralia.com.br/{ESPECIALIDADE}/{CONVENIO}"
+    driver.get(url_base)
     time.sleep(8)
     
     resultados = []
     links_processados = set()
 
     while len(resultados) < META:
-        # Pega os links usando o seletor da sua primeira imagem
+        # Pega os links dos nomes dos médicos (conforme sua 1ª imagem)
         elementos_nome = driver.find_elements(By.CSS_SELECTOR, "span[data-tracking-id='result-card-name']")
-        
         links_da_pagina = []
         for el in elementos_nome:
             try:
-                # Sobe dois níveis no código para achar o link <a> que envolve o nome
                 ancora = el.find_element(By.XPATH, "./..")
                 link = ancora.get_attribute("href")
                 if link and link not in links_processados:
@@ -47,65 +48,51 @@ def coletar():
 
         for link in links_da_pagina:
             if len(resultados) >= META: break
+            print(f"Acessando perfil: {link}")
             driver.get(link)
-            time.sleep(5)
+            time.sleep(6)
             
             try:
                 nome = driver.find_element(By.TAG_NAME, "h1").text
                 corpo = driver.find_element(By.TAG_NAME, "body").text
                 
-                # CRM e RQE via texto
+                # CRM e RQE (via texto)
                 crm = re.search(r"CRM\s*[:\-\s]*([A-Z]*\s*\d+)", corpo)
                 rqe = re.search(r"RQE\s*[:\-\s]*(\d+)", corpo)
                 
-                # Endereço
+                # --- LÓGICA DO ENDEREÇO (Corrigida para evitar 'Psiquiatra · Mais') ---
+                endereco = "Endereço não localizado"
                 try:
-                    # Procura pelo ícone de localização e pega o texto ao lado
-                    endereco_el = driver.find_element(By.CSS_SELECTOR, "span.text-body, .location-address")
-                    endereco = endereco_el.text
-                except:
-                    endereco = "Endereço não localizado"
+                    # Busca especificamente pela classe de endereço ou texto dentro do bloco de consulta
+                    end_el = driver.find_element(By.CSS_SELECTOR, ".location-address, [data-test-id='address-text']")
+                    endereco = end_el.text.replace("\n", " ").strip()
+                except: pass
 
-                # --- LÓGICA DO TELEFONE REVISADA ---
+                # --- LÓGICA DO TELEFONE (Específica para a Modal do vídeo) ---
                 tel = "Não revelado"
                 try:
-                    # Tenta encontrar o botão de mostrar telefone
+                    # Clica no botão (conforme sua 2ª imagem)
                     btn = driver.find_element(By.PARTIAL_LINK_TEXT, "Mostrar número de telefone")
                     driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", btn)
-                    time.sleep(2)
+                    time.sleep(1)
                     driver.execute_script("arguments[0].click();", btn)
                     
-                    # Espera a animação do modal terminar
-                    time.sleep(6) 
+                    # Espera a Modal abrir (conforme seu vídeo)
+                    time.sleep(5)
                     
-                    # Busca o número dentro da modal usando seletores variados das suas imagens
-                    # Tentativa 1: O <b> dentro da modal (sua 3ª imagem)
-                    # Tentativa 2: Links que começam com 'tel:'
-                    # Tentativa 3: Qualquer texto que tenha padrão de telefone (xx) xxxx-xxxx
+                    # Procura o número que está dentro do <b> e do link 'tel:' (conforme sua 3ª imagem)
+                    links_tel = driver.find_elements(By.CSS_SELECTOR, "a[href^='tel:']")
+                    for l in links_tel:
+                        # Pega o primeiro link visível que contenha um número
+                        texto_tel = l.text.strip()
+                        if texto_tel and "(" in texto_tel:
+                            tel = texto_tel
+                            break
                     
-                    seletores_tel = [
-                        "div.modal-content b", 
-                        "b.text-nowrap", 
-                        "a[data-tracking-id='phone-number']",
-                        "span.phone-number"
-                    ]
-                    
-                    for seletor in seletores_tel:
-                        try:
-                            el_tel = driver.find_element(By.CSS_SELECTOR, seletor)
-                            if el_tel.text and "(" in el_tel.text:
-                                tel = el_tel.text
-                                break
-                        except:
-                            continue
-                    
-                    # Se ainda não achou, tenta pegar o número direto do link 'tel:' no código
-                    if tel == "Não revelado":
-                        link_tel = driver.find_element(By.XPATH, "//a[contains(@href, 'tel:')]")
-                        tel = link_tel.get_attribute("href").replace("tel:", "")
-
-                except Exception as e:
-                    print(f"Aviso: Não conseguiu abrir o modal de telefone para {nome}")
+                    # Se não achou pelo texto, extrai direto do atributo 'href'
+                    if tel == "Não revelado" and links_tel:
+                        tel = links_tel[0].get_attribute("href").replace("tel:", "")
+                except: pass
 
                 resultados.append({
                     "Nome": nome,
@@ -113,25 +100,29 @@ def coletar():
                     "RQE": rqe.group(1) if rqe else "N/A",
                     "Plano": CONVENIO.upper(),
                     "Telefone": tel,
-                    "Endereço": endereco.replace("\n", " ")
+                    "Endereço": endereco
                 })
-                print(f"Sucesso: {nome}")
+                print(f"OK: {nome} | Tel: {tel}")
             except: continue
             
-            driver.get(url) # Volta para a lista
-            time.sleep(4)
+            # Volta para a listagem (mais estável que driver.back())
+            driver.get(url_base)
+            time.sleep(5)
 
-        # Próxima página
+        # Paginação
         try:
             btn_next = driver.find_element(By.CSS_SELECTOR, "[data-test-id='pagination-next']")
             driver.execute_script("arguments[0].click();", btn_next)
-            url = driver.current_url
+            url_base = driver.current_url
             time.sleep(6)
         except: break
 
     return resultados
 
+# Executa e salva
 dados = coletar()
 if dados:
-    pd.DataFrame(dados).to_csv("resultado_doctoralia.csv", index=False, encoding='utf-8-sig')
+    df = pd.DataFrame(dados)
+    df.to_csv("resultado_doctoralia.csv", index=False, encoding='utf-8-sig')
+    print("Planilha gerada com sucesso!")
 driver.quit()
