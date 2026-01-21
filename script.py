@@ -60,8 +60,11 @@ def coletar():
                 
                 # Endereço
                 try:
-                    endereco = driver.find_element(By.CLASS_NAME, "location-address").text
-                except: endereco = "Não encontrado"
+                    # Procura pelo ícone de localização e pega o texto ao lado
+                    endereco_el = driver.find_element(By.CSS_SELECTOR, "span.text-body, .location-address")
+                    endereco = endereco_el.text
+                except:
+                    endereco = "Endereço não localizado"
 
                 # --- LÓGICA DO TELEFONE REVISADA ---
                 tel = "Não revelado"
