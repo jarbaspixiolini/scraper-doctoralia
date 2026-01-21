@@ -63,34 +63,46 @@ def coletar():
                     endereco = driver.find_element(By.CLASS_NAME, "location-address").text
                 except: endereco = "Não encontrado"
 
-                # TELEFONE (Ajustado para esperar a janela flutuante abrir)
+                # --- LÓGICA DO TELEFONE REVISADA ---
                 tel = "Não revelado"
                 try:
-                    # 1. Tenta clicar no link que você mostrou na imagem
+                    # Tenta encontrar o botão de mostrar telefone
                     btn = driver.find_element(By.PARTIAL_LINK_TEXT, "Mostrar número de telefone")
                     driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", btn)
-                    time.sleep(1)
+                    time.sleep(2)
                     driver.execute_script("arguments[0].click();", btn)
                     
-                    # 2. ESPERA a janelinha (modal) aparecer
-                    time.sleep(4) 
+                    # Espera a animação do modal terminar
+                    time.sleep(6) 
                     
-                    # 3. Tenta capturar o número de 3 formas diferentes dentro da janela
-                    try:
-                        # Forma 1: Pelo negrito <b> que você mostrou na 3ª imagem
-                        tel_elemento = driver.find_element(By.CSS_SELECTOR, "div.modal-content b")
-                        tel = tel_elemento.text
-                    except:
+                    # Busca o número dentro da modal usando seletores variados das suas imagens
+                    # Tentativa 1: O <b> dentro da modal (sua 3ª imagem)
+                    # Tentativa 2: Links que começam com 'tel:'
+                    # Tentativa 3: Qualquer texto que tenha padrão de telefone (xx) xxxx-xxxx
+                    
+                    seletores_tel = [
+                        "div.modal-content b", 
+                        "b.text-nowrap", 
+                        "a[data-tracking-id='phone-number']",
+                        "span.phone-number"
+                    ]
+                    
+                    for seletor in seletores_tel:
                         try:
-                            # Forma 2: Pelo link de telefone (tel:)
-                            tel_elemento = driver.find_element(By.CSS_SELECTOR, "a[href^='tel:']")
-                            tel = tel_elemento.text
+                            el_tel = driver.find_element(By.CSS_SELECTOR, seletor)
+                            if el_tel.text and "(" in el_tel.text:
+                                tel = el_tel.text
+                                break
                         except:
-                            # Forma 3: Pela classe genérica de número
-                            tel_elemento = driver.find_element(By.CLASS_NAME, "phone-number")
-                            tel = tel_elemento.text
-                except:
-                    pass
+                            continue
+                    
+                    # Se ainda não achou, tenta pegar o número direto do link 'tel:' no código
+                    if tel == "Não revelado":
+                        link_tel = driver.find_element(By.XPATH, "//a[contains(@href, 'tel:')]")
+                        tel = link_tel.get_attribute("href").replace("tel:", "")
+
+                except Exception as e:
+                    print(f"Aviso: Não conseguiu abrir o modal de telefone para {nome}")
 
                 resultados.append({
                     "Nome": nome,
