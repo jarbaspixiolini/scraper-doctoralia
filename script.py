@@ -25,7 +25,7 @@ def coletar():
     url = f"https://www.doctoralia.com.br/{ESPECIALIDADE}/{CONVENIO}"
     print(f"Acessando: {url}")
     driver.get(url)
-    time.sleep(6)
+    time.sleep(10)
     
     # Fecha banner de cookies se aparecer
     try:
@@ -61,7 +61,7 @@ def coletar():
             
             print(f"Processando: {link}")
             driver.get(link)
-            time.sleep(5)
+            time.sleep(10)
             
             try:
                 corpo = driver.find_element(By.TAG_NAME, "body").text
@@ -83,9 +83,9 @@ def coletar():
                     # Rola até o botão para ele ficar visível
                     btn = driver.find_element(By.CSS_SELECTOR, "[data-test-id='show-phone-button']")
                     driver.execute_script("arguments[0].scrollIntoView();", btn)
-                    time.sleep(1)
+                    time.sleep(10)
                     driver.execute_script("arguments[0].click();", btn)
-                    time.sleep(3)
+                    time.sleep(10)
                     tel_element = driver.find_element(By.CSS_SELECTOR, ".phone-number, [data-test-id='phone-number'], a[href^='tel:']")
                     tel = tel_element.text
                 except: 
@@ -113,7 +113,7 @@ def coletar():
             btn_next = driver.find_element(By.CSS_SELECTOR, "[data-test-id='pagination-next']")
             driver.execute_script("arguments[0].click();", btn_next)
             url = driver.current_url # Atualiza a URL base para a próxima página
-            time.sleep(6)
+            time.sleep(10)
         except:
             print("Fim das páginas.")
             break
