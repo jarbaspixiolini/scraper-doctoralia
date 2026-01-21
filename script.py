@@ -10,7 +10,7 @@ import re
 # --- CONFIGURAÇÃO ---
 ESPECIALIDADE = "psiquiatra"
 CONVENIO = "unimed"
-META = 15 
+META = 30 
 # --------------------
 
 chrome_options = Options()
