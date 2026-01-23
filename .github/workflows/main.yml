@@ -23,7 +23,7 @@ jobs:
       - name: Rodar o Scraper
         # Aqui enviamos a URL e dizemos para salvar com o nome que o GitHub espera
         run: |
-          python script.py "https://www.doctoralia.com.br/psiquiatra/unimed" --limite 50 --headless --output resultado_doctoralia.csv
+          python script.py "https://www.doctoralia.com.br/endocrinologista/unimed" --limite 50 --headless --output resultado_doctoralia.csv
 
       - name: Salvar no Repositorio
         run: |
