@@ -1,31 +1,51 @@
-﻿Nome,CRM,RQE,Plano,Telefone,Endereço
-Dra. Alícia Andrade,MG 95505,N/A,UNIMED,Não revelado,Endereço não localizado
-Dra. Emily Jodelly Ohya Carvalho,SP 213881,N/A,UNIMED,Não revelado,Endereço não localizado
-Clínica pra Gente,N/A,N/A,UNIMED,+551151973115,Endereço não localizado
-Dr. Gabriel Piacentini Bulhões,SP 254619,N/A,UNIMED,Não revelado,Endereço não localizado
-Dr. Gustavo Teixeira Caprio,SP 184185,N/A,UNIMED,Não revelado,Endereço não localizado
-Clínica Saúde Psíquica,N/A,N/A,UNIMED,+5511937194660,Endereço não localizado
-Dra. Gabriela Mesquita Maciel,SP 238317,N/A,UNIMED,Não revelado,Endereço não localizado
-Dra. Ana Angélica Luz Pereira,SP 242926,N/A,UNIMED,Não revelado,Endereço não localizado
-Presenciar - Atendimento Psiquiátrico Online,N/A,N/A,UNIMED,+5531984170114,Endereço não localizado
-Dra. Michele Rossato,DF 25452,N/A,UNIMED,Não revelado,Endereço não localizado
-Dr. João Manoel Almeida Santos,SP 256592,N/A,UNIMED,Não revelado,Endereço não localizado
-Dra. Tania Pietrobon,SP 246880,N/A,UNIMED,Não revelado,Endereço não localizado
-Dr. Rodolfo Cotrik,MG 28495,19013,UNIMED,Não revelado,Endereço não localizado
-Dr. Rodolfo Cotrik,MG 28495,19013,UNIMED,Não revelado,Endereço não localizado
-Dra. Michele Rossato,DF 25452,N/A,UNIMED,Não revelado,Endereço não localizado
-Dra. Michele Rossato,DF 25452,N/A,UNIMED,Não revelado,Endereço não localizado
-Dra. Tania Pietrobon,SP 246880,N/A,UNIMED,Não revelado,Endereço não localizado
-Dr. Rodolfo Cotrik,MG 28495,19013,UNIMED,Não revelado,Endereço não localizado
-Dr. Lucas Katuyama,SP 237957,N/A,UNIMED,Não revelado,Endereço não localizado
-Dr. Rodolfo Cotrik,MG 28495,19013,UNIMED,Não revelado,Endereço não localizado
-Dra. Tania Pietrobon,SP 246880,N/A,UNIMED,Não revelado,Endereço não localizado
-Dr. Igor Ribeiro,82926,57644,UNIMED,Não revelado,Endereço não localizado
-Dra. Michele Rossato,DF 25452,N/A,UNIMED,Não revelado,Endereço não localizado
-Dra. Michele Rossato,DF 25452,N/A,UNIMED,Não revelado,Endereço não localizado
-Dr. Igor Ribeiro,82926,57644,UNIMED,Não revelado,Endereço não localizado
-Dra. Tania Pietrobon,SP 246880,N/A,UNIMED,Não revelado,Endereço não localizado
-Dr. Igor Ribeiro,82926,57644,UNIMED,Não revelado,Endereço não localizado
-Dra. Tania Pietrobon,SP 246880,N/A,UNIMED,Não revelado,Endereço não localizado
-Dra. Tania Pietrobon,SP 246880,N/A,UNIMED,Não revelado,Endereço não localizado
-Dr. Rodolfo Cotrik,MG 28495,19013,UNIMED,Não revelado,Endereço não localizado
+﻿Nome,CRM,RQE,Telefone(s),Email,URL_Perfil
+Dr. Antonio Felipe Raquelo Menegassio,CRM SP 256388,,(11) 5197-3115,N/A,https://www.doctoralia.com.br/antonio-felipe-raquelo-menegassio/psiquiatra/sao-paulo
+Dra. Michele Rossato,CRM DF 25452,,N/A,N/A,https://www.doctoralia.com.br/michele-rossato/psiquiatra/brasilia
+Dra. Emily Jodelly Ohya Carvalho,CRM SP 213881,,(11) 5197-3115,N/A,https://www.doctoralia.com.br/emily-jodelly-ohya-carvalho-2/psiquiatra/sao-paulo
+Dr. Gabriel Piacentini Bulhões,CRM SP 254619,,(11) 5197-3115,N/A,https://www.doctoralia.com.br/gabriel-piacentini-bulhoes-2/psiquiatra/sao-paulo
+Dr. Lucas Katuyama,CRM SP 237957,,(11) 5197-3115 | (11) 95682-7104,N/A,https://www.doctoralia.com.br/lucas-katuyama/psiquiatra/sao-paulo
+Dra. Alícia Andrade,CRM MG 95505,RQE Nº: 68743,(31) 3268-9239,N/A,https://www.doctoralia.com.br/alicia-andrade/psiquiatra-generalista/belo-horizonte
+Dr. Guilherme Ismael Penteado Steagall Gertsenchtein,CRM SP 241125,,(11) 5197-3115,N/A,https://www.doctoralia.com.br/guilherme-ismael-penteado-steagall-gertsenchtein/psiquiatra/sao-paulo
+Dr. João Manoel Almeida Santos,CRM SP 256592,,(11) 5197-3115,N/A,https://www.doctoralia.com.br/joao-manoel-almeida-santos/psiquiatra/sao-paulo
+Dra. Sulyanne Saraiva,CRM SP 256073,,(11) 5197-3115,N/A,https://www.doctoralia.com.br/sulyanne-saraiva/psiquiatra/sao-paulo
+Dr. Rodolfo Cotrik,CRM MG 28495,RQE Nº: 19013,(31) 98417-0114,N/A,https://www.doctoralia.com.br/rodolfo-cotrik-3/psiquiatra/vitoria
+Dr. Gustavo Pereira Freitas,CRM MG 92691,,(34) 3817-8202,N/A,https://www.doctoralia.com.br/gustavo-pereira-freitas-2/psiquiatra/brasilia
+Dr. Igor Ribeiro,,RQE Nº: 57644,(31) 98417-0114,N/A,https://www.doctoralia.com.br/igor-ribeiro-3/psiquiatra/campo-grande
+Dra. Tania Pietrobon,CRM SP 246880,,(31) 98417-0114,N/A,https://www.doctoralia.com.br/tania-pietrobon/psiquiatra/brasilia
+Dra. Tatiana Hoffmann,CRM SP 191580,,(11) 5197-3115,N/A,https://www.doctoralia.com.br/tatiana-hoffmann/psiquiatra/sao-paulo
+Dr. Gustavo Teixeira Caprio,CRM SP 184185,,(11) 5197-3115,N/A,https://www.doctoralia.com.br/gustavo-teixeira-caprio/psiquiatra/sao-paulo
+Dra. Catharina Gaspar Caraça,CRM SP 206056,RQE Nº: 135083,(11) 99579-2752,N/A,https://www.doctoralia.com.br/catharina-gaspar-caraca/psiquiatra/sao-paulo
+Dra. Gabriela Mesquita Maciel,CRM SP 238317,,(11) 94485-1752,N/A,https://www.doctoralia.com.br/gabriela-mesquita-maciel-2/psiquiatra/sao-paulo
+Dra. Ana Angélica Luz Pereira,CRM SP 242926,,(11) 5197-3115,N/A,https://www.doctoralia.com.br/ana-angelica-luz-pereira/psiquiatra/sao-paulo
+Dra. Alice Assis Chaves,CRM SP 242503,,(11) 5197-3115,N/A,https://www.doctoralia.com.br/alice-assis-chaves-2/psiquiatra/sao-paulo
+Dr. Gustavo Barros da Silva,CRM SP 231438,RQE Nº: 136025,0800 115 1790,N/A,https://www.doctoralia.com.br/gustavo-barros-da-silva/psiquiatra/manaus
+Dra. Adriele Neves,CRM SP 190934,RQE Nº: 91034,N/A,N/A,https://www.doctoralia.com.br/adriele-neves-4/psiquiatra/salvador
+Dr. Anthony Lawrence Correa Tasca,CRM SP 254388,,(11) 94485-1752,N/A,https://www.doctoralia.com.br/anthony-lawrence-correa-tasca/psiquiatra/sao-paulo
+Dra. Bárbara Pupo Pereira,CRM SP 217572,,(11) 94485-1752,N/A,https://www.doctoralia.com.br/barbara-pupo-pereira-2/psiquiatra/sao-paulo
+Dr. Vitor Giacomini Flosi,,"RQE Nº: 42478, RQE Nº: 85084",(17) 99194-4561 | (17) 3231-9441,N/A,https://www.doctoralia.com.br/vitor-giacomini-flosi/medico-acupunturista-psiquiatra/sao-jose-do-rio-preto
+Dr. Vinicius de Souza Costa,,,(11) 97883-0096,N/A,https://www.doctoralia.com.br/vinicius-de-souza-costa/psiquiatra/sao-paulo
+Dra. Renata de Sousa Acorsi,CRM SP 210534,,(11) 5197-3115,N/A,https://www.doctoralia.com.br/renata-de-sousa-acorsi/psiquiatra/sao-paulo
+Dra. Liuana Carvalho,CRM RJ 1195026,,(21) 96774-1990,N/A,https://www.doctoralia.com.br/liuana-carvalho/psiquiatra-generalista/niteroi
+Dr. Pedro Camargo Matuck,CRM SP 224088,,(11) 96057-9648,N/A,https://www.doctoralia.com.br/pedro-camargo-matuck/psiquiatra/sao-paulo
+Dra. Diva Rocha,CRM PR 51810,RQE Nº: 37348,(45) 99847-5399,N/A,https://www.doctoralia.com.br/diva-rocha/medico-de-familia-psiquiatra/foz-do-iguacu
+Dr. Adao Luiz Lopes da Costa,,RQE Nº: 210,(51) 3222-3775,N/A,https://www.doctoralia.com.br/adao-luiz-lopes-da-costa/psiquiatra/porto-alegre
+Dr. Aluisio Henrique Rodrigues,CRM ES 14829,RQE Nº: 15009,(27) 3711-0282,N/A,https://www.doctoralia.com.br/aluisio-henrique-rodrigues/psiquiatra/colatina
+Dr. Diego Vieira da Silva,CRM SP 168918,,(11) 2755-6950,N/A,https://www.doctoralia.com.br/diego-vieira-da-silva-2/psiquiatra/sao-paulo
+Dra. Eunice Zanatta,CRM RS 16491,RQE Nº: 45164,(55) 99127-6942 | (55) 3217-2130,N/A,https://www.doctoralia.com.br/eunice-zanatta/psiquiatra-pediatra/santa-maria
+Dra. Mariana do Nascimento Tavares,CRM SP 232024,,(11) 5197-3115,N/A,https://www.doctoralia.com.br/mariana-do-nascimento-tavares/psiquiatra/sao-paulo
+Dr. Adelmo Pontes Aragao,,RQE Nº: 3172,(85) 3262-2156 | (85) 98950-1897,N/A,https://www.doctoralia.com.br/adelmo-pontes-aragao/psiquiatra/fortaleza
+Dra. Débora de Almeida Silva,CRM SP 256316,,(11) 5197-3115,N/A,https://www.doctoralia.com.br/debora-de-almeida-silva/psiquiatra/sao-paulo
+Dra. Mariana Mascarenhas Mazaro,CRM SP 105324,RQE Nº: 62816,(18) 3916-5233 | (18) 98123-4187,N/A,https://www.doctoralia.com.br/mariana-mascarenhas-mazaro/psiquiatra/presidente-prudente
+Catarina Milagres Eleutério,CRM MG 72987,RQE Nº: 68345,(31) 3517-2700,N/A,https://www.doctoralia.com.br/catarina-milagres-eleuterio/psiquiatra/ouro-preto
+Dr. Dirceu de Campos Valladares Neto,CRM MG 16534,"RQE Nº: 17191, RQE Nº: 35767",(31) 3286-3301 | (31) 99972-9344,N/A,https://www.doctoralia.com.br/dirceu-de-campos-valladares-neto-2/psiquiatra/nova-lima
+Dra. Keicy Parente,CRM BA 31949,,(88) 99225-3131 | (88) 99316-1551,N/A,https://www.doctoralia.com.br/keicy-parente/psiquiatra/juazeiro-do-norte
+Dra. Maria Thereza Patury Galvão Castro,CRM SP 220519,,(11) 5197-3115,N/A,https://www.doctoralia.com.br/maria-thereza-patury-galvao-castro/psiquiatra/sao-paulo
+Dr. Conrado Pires,,,N/A,N/A,https://www.doctoralia.com.br/conrado-pires/psiquiatra/sao-joao-del-rei
+Dr. Pablo Cordeiro,CRM AP 3384,,(96) 7400-6050,N/A,https://www.doctoralia.com.br/pablo-cordeiro-2/medico-clinico-geral/fortaleza
+Dr. Marcos Caprini Cremonini,CRM SP 257099,,(11) 5197-3115,N/A,https://www.doctoralia.com.br/marcos-caprini-cremonini/psiquiatra/sao-paulo
+Dr. Ryo Chiba,,RQE Nº: 112166,(11) 5197-3115,N/A,https://www.doctoralia.com.br/ryo-chiba-2/psiquiatra/sao-paulo
+Dr. Daniel Zagatto,CRM SP 237824,,(11) 5197-3115,N/A,https://www.doctoralia.com.br/daniel-zagatto/psiquiatra/sao-paulo
+Dra. Mariana de Oliveira Cotrim,CRM SP 202708,,(11) 5197-3115,N/A,https://www.doctoralia.com.br/mariana-de-oliveira-cotrim/psiquiatra/sao-paulo
+Dra. Marianna Letícia Vasconcelos Patrocínio,CRM SP 257350,,(11) 5197-3115,N/A,https://www.doctoralia.com.br/marianna-leticia-vasconcelos-patrocinio/psiquiatra/sao-paulo
+Dra. Rita De Cassia Do Amaral Faria,,,(12) 3202-8080 | (12) 99221-5277,N/A,https://www.doctoralia.com.br/rita-de-cassia-do-amaral-faria-2/psiquiatra/sao-jose-dos-campos
+Dra. Ana Cecília Castanheira Jardim,,,(11) 5197-3115,N/A,https://www.doctoralia.com.br/ana-cecilia-castanheira-jardim/psiquiatra/sao-paulo
